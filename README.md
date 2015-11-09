@@ -69,7 +69,7 @@ Issues (bugs or feature requests) should be created on the github repo: https://
 
 # AUTHOR
 
-Hunter McMillen &lt;mcmillhj@gmail.com>
+Hunter McMillen <mcmillhj@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
