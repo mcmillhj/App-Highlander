@@ -8,9 +8,18 @@ use English qw(-no_match_vars);
 use Fcntl qw(:flock);
 use Path::Tiny;
 
-our $LOCKDIR = '/var/highlander/';
-our $LOCKFILE;
+our $LOCKDIR;
+sub import {
+   my ($self, %args) = @_;
 
+   _create_if_not_exists(
+      $LOCKDIR = $args{LOCKDIR} // '/var/highlander/'
+   );
+
+   return;
+}
+
+our $LOCKFILE;
 sub get_lock {
    my ($lock_string) = @_;
    $lock_string = _build_lock_string($lock_string);
@@ -57,6 +66,16 @@ sub _build_lock_string {
    return path($LOCKDIR, $lock_name)->canonpath;
 }
 
+sub _create_if_not_exists {
+   my ($dir) = @_;
+   return if -e $dir;
+
+   mkdir $dir, 0755
+      or die "Unable to make directory '$dir': $OS_ERROR";
+
+   return;
+}
+
 1;
 
 __END__
@@ -69,7 +88,7 @@ App::Highlander
 
 =head1 DESCRIPTION
 
-Simple module that provides a named locking mechanism based on flock. Application code requests a lock, then executes, then releases the lock. Lockfiles are stored in /var/highlander, this will be more flexible in the future. For now, /var/highlander needs to exist and the user running the Highlander'd script needs to have write and read permisissions on files in /var/highlander.
+Simple module that provides a named locking mechanism based on flock. Application code requests a lock, then executes, then releases the lock. Lockfiles are stored in /var/highlander by default. You can optionally specify a different LOCK directory when using App::Highlander by specifying the LOCKDIR option. /var/highlander needs to exist and the user running the Highlander'd script needs to have write and read permisissions on files in /var/highlander.
 
 App::Highlander does *not* currently (and may never) handle errors, this means that if you application dies under Highlander then it will not have released the lock. Application code will need to capture the error with eval or a sugary module like Try::Tiny then explicitly release the lock.
 
@@ -96,6 +115,12 @@ or
 
  App::Highlander::release_lock('lockstring');
 
+or
+
+ use App::Highlander LOCKDIR => "$ENV{HOME}/.locks";
+ 
+ ...
+ 
 =head1 METHODS 
 
 =over 4
@@ -111,14 +136,6 @@ Attempts to release a lock on the suppplied lock string. If no lock string is su
 Returns the name of the lock file that was destroyed.
 
 =back
-
-=head1 AUTHOR
-
-Hunter McMillen <mcmillhj@cpan.org>
-
-=head1 LICENSE
-
-This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.
 
 =head1 ISSUES
 

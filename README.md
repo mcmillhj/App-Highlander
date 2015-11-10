@@ -8,7 +8,7 @@ App::Highlander - Module that provides simple named locks
 
 # VERSION
 
-version 0.001
+version 0.002
 
 # SYNOPSIS
 
@@ -55,21 +55,13 @@ App::Highlander
     Attempts to release a lock on the suppplied lock string. If no lock string is supplied then $PROGRAM\_NAME will be used. Releasing the lock will close the open filehandle is that was used for flock and delete the lockfile
     Returns the name of the lock file that was destroyed.
 
-# AUTHOR
-
-Hunter McMillen &lt;mcmillhj@cpan.org>
-
-# LICENSE
-
-This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.
-
 # ISSUES
 
 Issues (bugs or feature requests) should be created on the github repo: https://github.com/mcmillhj/App-Highlander/issues
 
 # AUTHOR
 
-Hunter McMillen <mcmillhj@cpan.org>
+Hunter McMillen &lt;mcmillhj@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
