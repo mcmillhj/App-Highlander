@@ -33,9 +33,15 @@ or
 
     App::Highlander::release_lock('lockstring');
 
+or
+
+    use App::Highlander LOCKDIR => "$ENV{HOME}/.locks";
+    
+    ...
+
 # DESCRIPTION
 
-Simple module that provides a named locking mechanism based on flock. Application code requests a lock, then executes, then releases the lock. Lockfiles are stored in /var/highlander, this will be more flexible in the future. For now, /var/highlander needs to exist and the user running the Highlander'd script needs to have write and read permisissions on files in /var/highlander.
+Simple module that provides a named locking mechanism based on flock. Application code requests a lock, then executes, then releases the lock. Lockfiles are stored in /var/highlander by default. You can optionally specify a different LOCK directory when using App::Highlander by specifying the LOCKDIR option. /var/highlander needs to exist and the user running the Highlander'd script needs to have write and read permisissions on files in /var/highlander.
 
 App::Highlander does \*not\* currently (and may never) handle errors, this means that if you application dies under Highlander then it will not have released the lock. Application code will need to capture the error with eval or a sugary module like Try::Tiny then explicitly release the lock.
 
