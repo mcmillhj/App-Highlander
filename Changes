@@ -1,6 +1,8 @@
 Revision history for App-Highlander
 
 {{$NEXT}}
+
+0.003       2015-11-29
     - default to writing locks to a temporary directory created by File::Temp since
       it is unlikely that /var/highlander will be writable in any test environments
 0.002       2015-11-09
